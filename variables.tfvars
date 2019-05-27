@@ -3,6 +3,9 @@ aws_region 		= "us-east-2"
 resource_creation	= true
 resource_name		= "test"
 
+s3_bucket_name			= ["main-1-s3-bucket-tfstate","main-2-s3-bucket-tfstate","main-3-s3-bucket-tfstate"]
+s3_bucket_acl			= "private"
+
 sqs_visibility_timeout_seconds	= 30
 sqs_message_retention_seconds	= 345600
 sqs_max_message_size		= 262144
