@@ -1,5 +1,5 @@
 data "template_file" "kms_key_policy" {
-	template = <<POLICY
+  template = <<EOF
 {
     "Id": "key-consolepolicy-3",
     "Version": "2012-10-17",
@@ -8,7 +8,7 @@ data "template_file" "kms_key_policy" {
             "Sid": "Enable IAM User Permissions",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::829409305595:root"
+                "AWS": "arn:aws:iam::$${aws_account_num}:root"
             },
             "Action": "kms:*",
             "Resource": "*"
@@ -17,7 +17,7 @@ data "template_file" "kms_key_policy" {
             "Sid": "Allow access for Key Administrators",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::829409305595:user/DonaldDcku"
+                "AWS": "arn:aws:iam::$${aws_account_num}:user/$${aws_user}"
             },
             "Action": [
                 "kms:Create*",
@@ -41,7 +41,7 @@ data "template_file" "kms_key_policy" {
             "Sid": "Allow use of the key",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::829409305595:user/DonaldDcku"
+                "AWS": "arn:aws:iam::$${aws_account_num}:user/$${aws_user}"
             },
             "Action": [
                 "kms:Encrypt",
@@ -56,7 +56,7 @@ data "template_file" "kms_key_policy" {
             "Sid": "Allow attachment of persistent resources",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::829409305595:user/DonaldDcku"
+                "AWS": "arn:aws:iam::$${aws_account_num}:user/$${aws_user}"
             },
             "Action": [
                 "kms:CreateGrant",
@@ -72,35 +72,30 @@ data "template_file" "kms_key_policy" {
         }
     ]
 }
-POLICY
+EOF
+  vars = {
+    aws_account_num = "${var.aws_account_num}"
+    aws_user        = "${var.aws_user}"
+  }
+
 }
+
 
 resource "aws_kms_key" "kms_key_creation_1" {
-	description		= "${var.kms_resource_name}"
-	policy			= "${data.template_file.kms_key_policy.rendered}"
-	deletion_window_in_days	= "${var.kms_deletion_window_in_days}"
-	enable_key_rotation	= "${var.kms_enable_key_rotation}"
-	tags	= {
-		Name		= "${var.kms_resource_name}" 
-                Project         = "${var.tag_project_code}"
-                Department      = "${var.tag_department}"
+  description 			= "${var.kms_resource_name}"
+  policy 			= "${data.template_file.kms_key_policy.rendered}"
+  deletion_window_in_days 	= "${var.kms_deletion_window_in_days}"
+  enable_key_rotation 		= "${var.kms_enable_key_rotation}"
+  tags = {
+    Name 	= "${var.kms_resource_name}"
+    Project 	= "${var.tag_project_code}"
+    Department 	= "${var.tag_department}"
 
-	}
+  }
 }
 
-resource "aws_kms_alias" "kms_key_creation_1_alias"{
-	name		= "alias/${var.kms_resource_name}"
-	target_key_id	= "${aws_kms_key.kms_key_creation_1.key_id}"
-}
 
-output "cmk_arn" {
-	value	= "${aws_kms_key.kms_key_creation_1.arn}"
-}
-
-output "cmk_alias" {
-	value	= "${aws_kms_alias.kms_key_creation_1_alias.arn}"
-}
-
-output "cmk_id" {
-	value	= "${aws_kms_key.kms_key_creation_1.key_id}"
+resource "aws_kms_alias" "kms_key_creation_1_alias" {
+  name 		= "alias/${var.kms_resource_name}"
+  target_key_id = "${aws_kms_key.kms_key_creation_1.key_id}"
 }
