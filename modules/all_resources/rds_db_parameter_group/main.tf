@@ -1,6 +1,7 @@
 resource "aws_db_parameter_group" "parameter_group" {
-  description = "Parameter Group for the RDS DB Instance : ${var.identifier}"
-  name        = "${var.identifier}-parameter-group"
+  count                    = "${var.enabled == "master" ? 1 : 0}"
+  description = "${var.description}"
+  name        = "${var.identifier}"
   family      = "${var.family}"
   tags        = "${merge(var.tags, map("Name", var.identifier))}"
   dynamic "parameter" {

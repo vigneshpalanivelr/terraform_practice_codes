@@ -19,38 +19,38 @@ db_performance_insights_enabled        = "false"
 db_iam_database_authentication_enabled = "false"
 
 db_license_model = {
-  postgres  = "postgresql-license"
-  mysql     = "general-public-license"
-  mariadb   = "general-public-license"
-  oracle    = "license-included"
+  postgres = "postgresql-license"
+  mysql    = "general-public-license"
+  mariadb  = "general-public-license"
+  oracle   = "license-included"
 }
 
 db_character_set_name = {
-  postgres  = ""
-  mysql     = ""
-  mariadb   = ""
-  oracle    = "UTF8"
+  postgres = ""
+  mysql    = ""
+  mariadb  = ""
+  oracle   = "UTF8"
 }
 
 db_enabled_cloudwatch_logs_exports = {
-  postgres  = ["postgresql", "upgrade"]
-  mysql     = ["error", "general", "slowquery"]
-  mariadb   = ["error", "general", "slowquery", "audit"]
-  oracle    = ["alert", "audit", "listener", "trace"]
+  postgres = ["postgresql", "upgrade"]
+  mysql    = ["error", "general", "slowquery"]
+  mariadb  = ["error", "general", "slowquery", "audit"]
+  oracle   = ["alert", "audit", "listener", "trace"]
 }
 
 db_port = {
-  postgres  = "5432"
-  mysql     = "3306"
-  mariadb   = "3306"
-  oracle    = "1521"
+  postgres = "5432"
+  mysql    = "3306"
+  mariadb  = "3306"
+  oracle   = "1521"
 }
 
 db_timezone = {
-  postgres  = ""
-  mysql     = ""
-  mariadb   = ""
-  oracle    = ""
+  postgres = ""
+  mysql    = ""
+  mariadb  = ""
+  oracle   = ""
 }
 
 db_parameter = {
