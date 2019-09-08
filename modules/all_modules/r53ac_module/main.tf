@@ -15,12 +15,12 @@ data "aws_route53_zone" "selected_r53_zone" {
   private_zone = true
 }
 
-module "r53c_record" {
-  source 	  = "../../all_resources/r53ac_record"
+module "r53ac_record" {
+  source          = "../../all_resources/r53ac_record"
   zone_id         = "${data.aws_route53_zone.selected_r53_zone.zone_id}"
   name            = "${var.r53_record_name}.${data.aws_route53_zone.selected_r53_zone.name}"
   ttl             = "${var.r53_record_ttl}"
-  records	  = "${var.r53_records}"
+  records         = "${var.r53_records}"
   type            = "${var.r53_record_type}"
   allow_overwrite = true
 }
