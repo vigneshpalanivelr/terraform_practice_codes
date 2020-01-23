@@ -1,7 +1,6 @@
 db_max_allocated_storage               = "100"
 db_backup_window                       = "02:00-03:00"
 db_maintenance_window                  = "Mon:03:00-Mon:04:00"
-# db_availability_zone                   = "ap-south-1a"
 db_subnet_group_name                   = "default"
 db_sg                                  = "default"
 db_storage_type                        = "gp2"

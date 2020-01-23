@@ -1,0 +1,10 @@
+output "ec2_id"					{ value = "${module.aws_ec2_module.ec2_id}"				}
+output "ec2_arn"				{ value = "${module.aws_ec2_module.ec2_arn}"				}
+output "ec2_availability_zone"			{ value = "${module.aws_ec2_module.ec2_availability_zone}"		}
+output "ec2_public_ip"				{ value = "${module.aws_ec2_module.ec2_public_ip}"			}
+output "ec2_primary_network_interface_id"	{ value = "${module.aws_ec2_module.ec2_primary_network_interface_id}"	}
+output "ec2_private_dns"			{ value = "${module.aws_ec2_module.ec2_private_dns}"			}
+output "ec2_private_ip"				{ value = "${module.aws_ec2_module.ec2_private_ip}"			}
+output "ec2_vpc_security_group_ids"		{ value = "${module.aws_ec2_module.ec2_vpc_security_group_ids}"		}
+output "ec2_subnet_id"				{ value = "${module.aws_ec2_module.ec2_subnet_id}"			}
+output "ec2_instance_state"			{ value = "${module.aws_ec2_module.ec2_instance_state}"			}
