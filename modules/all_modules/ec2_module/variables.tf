@@ -1,0 +1,22 @@
+variable "aws_region"					{}
+variable "aws_account_num"				{}
+variable "assume_role"					{}
+variable "aws_vpc_name"					{}
+variable "vpc_subnet_name"				{}
+variable "ec2_instance_name"				{}
+variable "ec2_sg_name"					{}
+variable "ec2_ami_root_device_type"			{}
+variable "ec2_virtualization_type"			{}
+variable "ec2_az"					{}
+variable "ec2_ebs_optimized"				{}
+variable "ec2_disable_api_termination"			{}
+variable "ec2_instance_profile_name"			{}
+variable "ec2_instance_initiated_shutdown_behavior"	{}
+variable "ec2_instance_type"				{}
+variable "ec2_monitoring"				{}
+variable "ec2_tags"					{ type = "map"}
+variable "ec2_root_volume_tags"				{ type = "map"}
+variable "ec2_root_volume_type"				{}
+variable "ec2_root_volume_size"				{}
+variable "ec2_root_volume_iops"				{}
+variable "ec2_root_volume_delete_on_termination"	{}

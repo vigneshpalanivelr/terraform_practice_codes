@@ -1,7 +1,7 @@
-aws_iam_user                    = "deployer"
-kms_is_enabled                  = true
-kms_deletion_window_in_days     = 30
-kms_enable_key_rotation         = "true"
+kms_is_enabled              = true
+kms_deletion_window_in_days = 30
+kms_enable_key_rotation     = "true"
+
 kms_key_tags = {
   Owner = "Vignesh Palanivel"
   Team  = "terraform-services-india"

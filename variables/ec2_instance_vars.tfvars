@@ -1,0 +1,30 @@
+aws_account_num				= "210315133748"
+aws_vpc_name				= "default-vpc"
+ec2_instance_name			= "test-ec2"
+ec2_sg_name				= "test-ec2-sg"
+ec2_ami_root_device_type		= "ebs"
+ec2_virtualization_type			= "hvm"
+vpc_subnet_name				= "default-subnet-1"
+ec2_instance_profile_name		= "deployer_role"
+ec2_az					= "ap-south-1a"
+ec2_ebs_optimized			= false
+ec2_disable_api_termination		= false
+ec2_instance_initiated_shutdown_behavior= "stop"
+ec2_instance_type			= "t2.micro"
+ec2_monitoring				= false
+ec2_root_volume_delete_on_termination   = true
+ec2_root_volume_iops			= 0
+ec2_root_volume_size			= 10
+ec2_root_volume_type			= "gp2"
+ec2_tags = {
+  Owner = "Vignesh Palanivel"
+  Team  = "terraform-services-india"
+  CCPC  = "123456789"
+  HSN   = "KMS KEY"
+}
+ec2_root_volume_tags = {
+  Owner = "Vignesh Palanivel"
+  Team  = "terraform-services-india"
+  CCPC  = "123456789"
+  HSN   = "KMS KEY"
+}
