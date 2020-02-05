@@ -1,12 +1,23 @@
+# S3 Backend Configuration
 aws_region                      = "ap-south-1"
 aws_iam_user                    = "deployer"
 assume_role                     = "deployer_role"
-aws_r53_zone                    = "vignesh-private.zone.com"
-ami_root_device_type		= "ebs"
-ami_virtualization_type		= "hvm"
-vpc_subnet_name			= "default-subnet-1"
-resource_creation               = true
 s3_backend_bucket               = "terraform-tfstate-mumba-1"
+
+# R53 Details
+aws_r53_zone                    = "vignesh-private.zone.com"
+r53_record_ttl                  = "300"
+r53_zone_force_destroy          = true
+
+# Common Tags
+tags = {
+  Owner = "Vignesh Palanivel"
+  DL    = "Vignesh_Palanivel@aws.com"
+  Team  = "terraform-services-india"
+  CCPC  = "123456789"
+}
+
+resource_creation               = true
 sqs_resource_name               = "main-sqs-queue"
 sqs_visibility_timeout_seconds  = 30
 sqs_message_retention_seconds   = 345600

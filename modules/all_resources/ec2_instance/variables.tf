@@ -9,7 +9,7 @@ variable "vpc_security_group_ids"		{ type = "list" }
 variable "subnet_id"				{}
 variable "iam_instance_profile"			{}
 variable "tags"					{ type = "map" }
-variable "volume_tags"				{ type = "map" }
+# variable "volume_tags"				{ type = "map" }
 variable "network_interface_id"			{}
 variable "volume_type"				{}
 variable "volume_size"				{}

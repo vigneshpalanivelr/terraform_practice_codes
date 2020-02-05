@@ -44,13 +44,13 @@ data "aws_network_interface" "ec2_eni" {
 
 #data source for SG
 data "aws_security_group" "sg_filter" {
-  name   = "${var.ec2_sg_name}"
+  name   = "${var.ec2_sg_name}-sg"
   vpc_id = "${data.aws_vpc.vpc_filter.id}"
 }
 
 #data filters for AMI
 data "aws_ami" "ami_filter" {
-  owners      = ["309956199498"]
+  owners      = ["${var.ec2_ami_owner_id}"]
   name_regex  = "^RHEL-8.0.0*"
   most_recent = true
   filter {
@@ -90,6 +90,7 @@ data "aws_iam_role" "ec2_profile" {
 module "aws_ec2_module" {
   source                               = "../../all_resources/ec2_instance/"
   ami                                  = "${data.aws_ami.ami_filter.id}"
+  ec2_instance_name                    = "${var.ec2_instance_name}"
   availability_zone                    = "${var.ec2_az}"
   ebs_optimized                        = "${var.ec2_ebs_optimized}"
   disable_api_termination              = "${var.ec2_disable_api_termination}"
@@ -99,11 +100,10 @@ module "aws_ec2_module" {
   vpc_security_group_ids               = ["${data.aws_security_group.sg_filter.id}"]
   subnet_id                            = "${data.aws_subnet.filter_subnet.id}"
   iam_instance_profile                 = "${data.aws_iam_role.ec2_profile.id}"
-  tags                                 = "${var.ec2_tags}"
-  volume_tags                          = "${var.ec2_root_volume_tags}"
-  network_interface_id		       = "${data.aws_network_interface.ec2_eni.id}"
-  volume_type			       = "${var.ec2_root_volume_type}"
-  volume_size			       = "${var.ec2_root_volume_size}"
-  iops				       = "${var.ec2_root_volume_iops}"
-  delete_on_termination		       = "${var.ec2_root_volume_delete_on_termination}"
+  tags                                 = "${var.tags}"
+  network_interface_id                 = "${data.aws_network_interface.ec2_eni.id}"
+  volume_type                          = "${var.ec2_root_volume_type}"
+  volume_size                          = "${var.ec2_root_volume_size}"
+  iops                                 = "${var.ec2_root_volume_iops}"
+  delete_on_termination                = "${var.ec2_root_volume_delete_on_termination}"
 }

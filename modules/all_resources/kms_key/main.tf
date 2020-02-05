@@ -17,7 +17,7 @@ data "template_file" "kms_key_policy" {
             "Sid": "Allow access for Key Administrators",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::$${aws_account_num}:user/$${aws_iam_user}"
+                "AWS": "arn:aws:iam::$${aws_account_num}:role/$${assume_role}"
             },
             "Action": [
                 "kms:Create*",
@@ -75,6 +75,7 @@ data "template_file" "kms_key_policy" {
 EOF
   vars = {
     aws_account_num = "${var.aws_account_num}"
+    assume_role     = "${var.assume_role}"
     aws_iam_user    = "${var.aws_iam_user}"
   }
 
@@ -87,7 +88,7 @@ resource "aws_kms_key" "kms_key_creation" {
   policy                  = "${data.template_file.kms_key_policy.rendered}"
   deletion_window_in_days = "${var.deletion_window_in_days}"
   enable_key_rotation     = "${var.enable_key_rotation}"
-  tags                    = "${merge(var.tags, map("Name", var.resource_name))}"
+  tags                    = "${merge(var.tags, map("Name", var.resource_name), map("Resource_Name", "KMS"))}"
 }
 
 
