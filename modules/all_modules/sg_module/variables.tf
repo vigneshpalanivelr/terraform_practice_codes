@@ -4,5 +4,5 @@ variable "assume_role"		{}
 variable "aws_vpc_name"		{}
 
 variable "sg_group_name"	{}
-variable "sg_tags"		{ type = "map" }
 variable "resource_name"	{}
+variable "tags"             { type = "map" }

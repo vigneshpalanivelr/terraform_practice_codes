@@ -1,22 +1,34 @@
+# RDS Storage 
+db_storage_type                        = "gp2"
 db_max_allocated_storage               = "100"
+db_storage_encrypted                   = "true"
+db_iops                                = "0"
+
+# RDS Backup and Maintenance
 db_backup_window                       = "02:00-03:00"
 db_maintenance_window                  = "Mon:03:00-Mon:04:00"
-db_subnet_group_name                   = "default"
-db_sg                                  = "default"
-db_storage_type                        = "gp2"
-db_iops                                = "0"
 db_backup_retention_period             = "1"
-db_monitoring_interval                 = "0"
-db_deletion_protection                 = "false"
-db_allow_major_version_upgrade         = "false"
-db_storage_encrypted                   = "true"
-db_auto_minor_version_upgrade          = "true"
-db_copy_tags_to_snapshot               = "true"
 db_skip_final_snapshot                 = "true"
+db_copy_tags_to_snapshot               = "true"
+
+# RDS Security
+db_deletion_protection                 = "false"
 db_publicly_accessible                 = "false"
-db_performance_insights_enabled        = "false"
 db_iam_database_authentication_enabled = "false"
 
+# RDS Upgrade Details
+db_allow_major_version_upgrade         = "false"
+db_auto_minor_version_upgrade          = "true"
+
+# RDS Performance and Monitoring
+db_performance_insights_enabled        = "false"
+db_monitoring_interval                 = "0"
+
+# RDS R53 Records Details
+rds_record_ttl                         = "300"
+rds_record_type                        = "CNAME"
+
+# ALL RDS License 
 db_license_model = {
   postgres = "postgresql-license"
   mysql    = "general-public-license"
@@ -24,6 +36,7 @@ db_license_model = {
   oracle   = "license-included"
 }
 
+# ALL RDS Charecter Sets
 db_character_set_name = {
   postgres = ""
   mysql    = ""
@@ -31,6 +44,7 @@ db_character_set_name = {
   oracle   = "UTF8"
 }
 
+# ALL RDS CloudWatch Logs
 db_enabled_cloudwatch_logs_exports = {
   postgres = ["postgresql", "upgrade"]
   mysql    = ["error", "general", "slowquery"]
@@ -38,6 +52,7 @@ db_enabled_cloudwatch_logs_exports = {
   oracle   = ["alert", "audit", "listener", "trace"]
 }
 
+# ALL RDS Port Defaults
 db_port = {
   postgres = "5432"
   mysql    = "3306"
@@ -45,6 +60,7 @@ db_port = {
   oracle   = "1521"
 }
 
+# ALL RDS Parameter Defaults
 db_parameter = {
   postgres = [{
     name         = "rds.force_ssl"
@@ -77,11 +93,4 @@ db_parameter = {
     value        = 4100
     apply_method = "immediate"
   }]
-}
-
-db_tags = {
-  Owner = "Vignesh Palanivel"
-  Team  = "terraform-services-india"
-  CCPC  = "123456789"
-  HSN   = "RDS DB INSTANCE"
 }

@@ -18,9 +18,9 @@ data "aws_vpc" "vpc_filter" {
 }
 
 module "aws_sg_group" {
-  source	= "../../all_resources/sg_group/"
-  name		= "${var.sg_group_name}"
+  source	    = "../../all_resources/sg_group/"
+  name		    = "${var.sg_group_name}-sg"
   description	= "Security Group for the resource - ${var.resource_name}"
-  vpc_id	= "${data.aws_vpc.vpc_filter.id}"
-  tags		= "${var.sg_tags}"
+  vpc_id	    = "${data.aws_vpc.vpc_filter.id}"
+  tags		    = "${var.tags}"
 }

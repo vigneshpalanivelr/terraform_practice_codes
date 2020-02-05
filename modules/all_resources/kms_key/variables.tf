@@ -1,4 +1,5 @@
 variable "aws_account_num"          {}
+variable "assume_role"              {}
 variable "aws_iam_user"             {}
 variable "resource_name"            {}
 variable "is_enabled"               {}

@@ -1,6 +1,4 @@
-ebs_tags = {
-  Owner = "Vignesh Palanivel"
-  Team  = "terraform-services-india"
-  CCPC  = "123456789"
-  HSN   = "EBS Volume"
-}
+ebs_size        = 1
+ebs_type        = "gp2"      # Other Types 'standard','io1','sc1','st1'
+ebs_iops        = 0
+ebs_encrypted   = false
