@@ -17,10 +17,11 @@ data "aws_kms_key" "filter_kms_key" {
 
 module "aws_ebs_volume" {
   source            = "../../all_resources/ebs_volume/"
+  ebs_volume_count  = "${var.ebs_volume_count}"
+  ebs_device_names  = "${var.ebs_device_names}"
   availability_zone = "${var.ebs_az}"
-  size              = "${var.ebs_size}"
+  resource_name     = "${var.resource_name}"
   type              = "${var.ebs_type}"
-  ebs_name          = "${var.ebs_name}"
   iops              = "${var.ebs_iops}"
   encrypted         = "${var.ebs_encrypted}"
   tags              = "${var.tags}"
