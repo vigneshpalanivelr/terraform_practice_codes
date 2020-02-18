@@ -22,4 +22,5 @@ resource "aws_instance" "ec2_instance" {
   }
   tags                                 = "${merge(var.tags, map("Name", var.ec2_instance_name), map("Resource_Name","EC2"))}"
   volume_tags                          = "${merge(var.tags, map("Name", "Root_Volume"), map("Resource_Name","EBS"))}"
+  user_data			       = "${var.userdata}"
 }

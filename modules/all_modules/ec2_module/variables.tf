@@ -20,3 +20,7 @@ variable "ec2_root_volume_size"                     {}
 variable "ec2_root_volume_iops"                     {}
 variable "ec2_root_volume_delete_on_termination"    {}
 variable "ec2_ami_owner_id"                         {}
+variable "ssh_group"                                {}
+variable "sudo_group"                               {}
+variable "root_user"                                {}
+variable "root_passwd"                              {}

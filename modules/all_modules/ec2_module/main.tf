@@ -51,11 +51,11 @@ data "aws_security_group" "sg_filter" {
 #data filters for AMI
 data "aws_ami" "ami_filter" {
   owners      = ["${var.ec2_ami_owner_id}"]
-  name_regex  = "^RHEL-8.0.0*"
+  name_regex  = "^RHEL-8*"
   most_recent = true
   filter {
     name   = "name"
-    values = ["*RHEL-8.0.0*"]
+    values = ["*RHEL-8*"]
   }
   filter {
     name   = "root-device-type"
@@ -86,6 +86,39 @@ data "aws_iam_role" "ec2_profile" {
   name = "${var.ec2_instance_profile_name}"
 }
 
+data "template_file" "userdata_tpl" {
+  template = "${file("${path.module}/userdata.tpl")}"
+  vars = {
+    ssh_group   = "${var.ssh_group}"
+    sudo_group  = "${var.sudo_group}"
+    root_user   = "${var.root_user}"
+    root_passwd = "${var.root_passwd}"
+  }
+}
+
+data "template_file" "userdata_sh" {
+  template = "${file("${path.module}/userdata.sh")}"
+  vars = {
+    ssh_group   = "${var.ssh_group}"
+    sudo_group  = "${var.sudo_group}"
+    root_user   = "${var.root_user}"
+    root_passwd = "${var.root_passwd}"
+  }
+}
+
+data "template_cloudinit_config" "userdata_multipart" {
+  gzip          = "false"
+  base64_encode = "false"
+  
+  part {
+    content_type = "text/cloud-config"
+    content      = "${data.template_file.userdata_tpl.rendered}"
+  }
+  part {
+    content_type = "text/x-shellscript"
+    content      = "${data.template_file.userdata_sh.rendered}"
+  }
+}
 
 module "aws_ec2_module" {
   source                               = "../../all_resources/ec2_instance/"
@@ -106,4 +139,5 @@ module "aws_ec2_module" {
   volume_size                          = "${var.ec2_root_volume_size}"
   iops                                 = "${var.ec2_root_volume_iops}"
   delete_on_termination                = "${var.ec2_root_volume_delete_on_termination}"
+  userdata			                       = "${data.template_cloudinit_config.userdata_multipart.rendered}"
 }
