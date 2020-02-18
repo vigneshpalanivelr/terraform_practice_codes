@@ -17,3 +17,7 @@ ec2_root_volume_delete_on_termination       = true
 ec2_root_volume_iops                        = 0
 ec2_root_volume_size                        = 10
 ec2_root_volume_type                        = "gp2"
+
+# User Data Variables (comma separated value)
+ssh_group                                   = "root_group"
+sudo_group                                  = "root_group"

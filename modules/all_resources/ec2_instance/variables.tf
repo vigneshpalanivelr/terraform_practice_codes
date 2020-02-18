@@ -15,3 +15,4 @@ variable "volume_type"				                  {}
 variable "volume_size"				                  {}
 variable "iops"					                        {}
 variable "delete_on_termination"		            {}
+variable "userdata"				{}

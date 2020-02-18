@@ -10,10 +10,10 @@ ebs_device_names = [
   },
   {
     name = "/dev/sdc",
-    size = "2"
+    size = "1"
   },
   {
     name = "/dev/sdd",
-    size = "3"
+    size = "1"
   },
 ]
