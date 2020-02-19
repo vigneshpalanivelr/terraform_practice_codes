@@ -59,3 +59,14 @@ module "aws_sg_group_rule_icmpv6_allow_all" {
   cidr_blocks       = "${var.cidr_block["public_access_ipv4"]}"
   security_group_id = "${data.aws_security_group.sg_filter.id}"
 }
+
+module "aws_sg_group_rule__allow_all" {
+  source            = "../../../all_resources/sg_group_rule/"
+  description       = "ALL Port Public Access"
+  type              = "egress"
+  protocol          = "ALL"
+  from_port         = "0"
+  to_port           = "65535"
+  cidr_blocks       = "${var.cidr_block["public_access_ipv4"]}"
+  security_group_id = "${data.aws_security_group.sg_filter.id}"
+}
