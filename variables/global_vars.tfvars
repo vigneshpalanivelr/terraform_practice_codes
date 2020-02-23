@@ -17,6 +17,10 @@ tags = {
   CCPC  = "123456789"
 }
 
+# SNS Topics
+sns_topic_information		        = "test-sns-topic-information-alert"
+sns_topic_critical		          = "test-sns-topic-critical-alert"
+
 resource_creation               = true
 sqs_resource_name               = "main-sqs-queue"
 sqs_visibility_timeout_seconds  = 30

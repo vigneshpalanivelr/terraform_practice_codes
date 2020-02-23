@@ -1,0 +1,11 @@
+cw_cpu_threshold_info     = "75"
+cw_cpu_threshold_critical = "85"
+cw_cpu_period             = "300"
+cw_mem_threshold_info     = "75"
+cw_mem_threshold_critical = "85"
+cw_mem_period             = "300"
+cw_diskspc_threshold      = "30"
+cw_diskspc_period         = "300"
+ebs_devices_list          = ["/dev/xvda2"]
+ebs_mount_path_list       = ["/"]
+cw_inst_status_period     = "300"
