@@ -1,0 +1,12 @@
+output "cpu_info_id"		{ value = "${aws_cloudwatch_metric_alarm.cpu_information.*.id}"		}
+output "cpu_alert_id"		{ value = "${aws_cloudwatch_metric_alarm.cpu_critical.*.id}"		}
+output "cpu_info_arn"		{ value = "${aws_cloudwatch_metric_alarm.cpu_information.*.arn}"	}
+output "cpu_alert_arn"		{ value = "${aws_cloudwatch_metric_alarm.cpu_critical.*.arn}"		}
+output "mem_info_id"		{ value = "${aws_cloudwatch_metric_alarm.mem_information.*.id}"		}
+output "mem_alert_id"		{ value = "${aws_cloudwatch_metric_alarm.mem_critical.*.id}"		}
+output "mem_info_arn"		{ value = "${aws_cloudwatch_metric_alarm.mem_information.*.arn}"	}
+output "mem_alert_arn"		{ value = "${aws_cloudwatch_metric_alarm.mem_critical.*.arn}"		}
+output "disk_alert_id" 		{ value = "${aws_cloudwatch_metric_alarm.disk_space_ebs_critical.*.id}"	}
+output "disk_alert_arn" 	{ value = "${aws_cloudwatch_metric_alarm.disk_space_ebs_critical.*.arn}"}
+output "status_alert_id" 	{ value = "${aws_cloudwatch_metric_alarm.instance_status_check.*.id}"	}
+output "status_alert_arn" 	{ value = "${aws_cloudwatch_metric_alarm.instance_status_check.*.arn}"	}

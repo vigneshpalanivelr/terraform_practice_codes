@@ -24,3 +24,4 @@ variable "ssh_group"                                {}
 variable "sudo_group"                               {}
 variable "root_user"                                {}
 variable "root_passwd"                              {}
+variable "ec2_ami_regex"                            {}

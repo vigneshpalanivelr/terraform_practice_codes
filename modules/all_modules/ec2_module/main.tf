@@ -51,11 +51,11 @@ data "aws_security_group" "sg_filter" {
 #data filters for AMI
 data "aws_ami" "ami_filter" {
   owners      = ["${var.ec2_ami_owner_id}"]
-  name_regex  = "^RHEL-8*"
+  name_regex  = "^${var.ec2_ami_regex}*"
   most_recent = true
   filter {
     name   = "name"
-    values = ["*RHEL-8*"]
+    values = ["*${var.ec2_ami_regex}*"]
   }
   filter {
     name   = "root-device-type"

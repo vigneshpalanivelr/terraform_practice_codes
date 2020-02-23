@@ -21,6 +21,14 @@ resource "aws_sns_topic" "sns_topic" {
     }
   }
   EOF
+  /*
+  # This is another way f creation subscription.
+  # But, We cannot destroy it.
+  # Hence commenting it
+  provisioner "local-exec" {
+    command = "aws sns subscribe --topic-arn ${aws_sns_topic.sns_topic.arn} --protocol ${var.protocol} --notification-endpoint ${var.endpoint}"
+  }
+  */
 }
 
 data "aws_iam_policy_document" "sns-topic-policy" {
