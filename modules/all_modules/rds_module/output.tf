@@ -1,17 +1,18 @@
-#Common KMS Key details
 /*
-Can be enabled if data source from TF State is required
+//Common KMS Key details
+//Can be enabled if data source from TF State is required
 output "kms_key_name"              {  value = "${data.terraform_remote_state.encryption.outputs.cmk_arn}"}
-*/
+
 //Can be disabled if data source from TF State is required
-# output "kms_key_name"              {  value = "${data.aws_kms_key.filter_kms_key.id}"}
+output "kms_key_name"              {  value = "${data.aws_kms_key.filter_kms_key.id}"}
+output "option_group_name"         {  value = "${module.aws_rds_option_group.rds_db_og_name}"}
+output "option_group_arn"          {  value = "${module.aws_rds_option_group.rds_db_og_arn}"}
+*/
 
 #Common parameter details
 output "security_grp_name"         {  value = "${data.aws_security_group.filter_sg.name}"}
 output "parameter_group_name"      {  value = "${module.aws_rds_parameter_group.rds_db_pg_name}"}
 output "parameter_group_arn"       {  value = "${module.aws_rds_parameter_group.rds_db_pg_arn}"}
-output "option_group_name"         {  value = "${module.aws_rds_option_group.rds_db_og_name}"}
-output "option_group_arn"          {  value = "${module.aws_rds_option_group.rds_db_og_arn}"}
 
 #Master Instance details
 output "master_address"            {  value = "${module.aws_rds_instance.rds_db_instance_address}"}

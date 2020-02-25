@@ -1,3 +1,6 @@
+# This modue can also be used to create normal bucket
+# without loggng enables
+
 terraform {
   backend "s3" {}
 }
@@ -9,9 +12,11 @@ provider "aws" {
   }
 }
 
-#data "aws_kms_key" "kms_alias_name" {
-#  key_id = "alias/${var.kms_resource_name}"
-#}
+/*
+data "aws_kms_key" "kms_alias_name" {
+  key_id = "alias/${var.kms_resource_name}"
+}
+*/
 
 module "s3_log_bucket" {
   source              = "../../all_resources/s3_log_bucket"

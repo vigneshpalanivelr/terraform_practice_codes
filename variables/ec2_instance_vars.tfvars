@@ -1,10 +1,9 @@
 # EC2 AMI Details
-ec2_ami_owner_id                            = "309956199498"
 ec2_ami_root_device_type                    = "ebs"
 ec2_virtualization_type                     = "hvm"
 
 # EC2 Advanced Options
-ec2_instance_profile_name                   = "deployer_role"
+ec2_instance_profile_name                   = "ec2_instance_profile"
 ec2_ebs_optimized                           = false
 ec2_monitoring                              = false
 

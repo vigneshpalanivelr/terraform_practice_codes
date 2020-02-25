@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_metric_alarm" "cpu_information" {
   count               = "${length(var.instance_ids)}"
-  alarm_name          = "${var.instance_name}-CPUUtilization-info-for-${var.instance_ids[count.index]}-${var.cw_cpu_threshold_info}"
+  alarm_name          = "${var.resource_name}-CPUUtilization-info-for-${var.instance_ids[count.index]}-${var.cw_cpu_threshold_info}"
   alarm_description   = "${var.cw_cpu_threshold_info}% CPU Utilization Reached"
   metric_name         = "CPUUtilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -17,7 +17,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_information" {
 
 resource "aws_cloudwatch_metric_alarm" "cpu_critical" {
   count               = "${length(var.instance_ids)}"
-  alarm_name          = "${var.instance_name}-CPUUtilization-alert-for-${var.instance_ids[count.index]}-${var.cw_cpu_threshold_critical}"
+  alarm_name          = "${var.resource_name}-CPUUtilization-alert-for-${var.instance_ids[count.index]}-${var.cw_cpu_threshold_critical}"
   alarm_description   = "${var.cw_cpu_threshold_critical}% CPU Utilization Reached"
   metric_name         = "CPUUtilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -34,7 +34,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_critical" {
 
 resource "aws_cloudwatch_metric_alarm" "disk_space_ebs_critical" {
   count               = "${length(var.instance_ids) * length(var.ebs_devices_list)}"
-  alarm_name          = "${var.instance_name}-Disk-Space-alert-for-Instance-${var.instance_ids[count.index % length(var.instance_ids)]}-Volume-${var.ebs_devices_list[count.index % length(var.ebs_devices_list)]}-${var.cw_diskspc_threshold}%"
+  alarm_name          = "${var.resource_name}-Disk-Space-alert-for-Instance-${var.instance_ids[count.index % length(var.instance_ids)]}-Volume-${var.ebs_devices_list[count.index % length(var.ebs_devices_list)]}-${var.cw_diskspc_threshold}%"
   alarm_description   = "${var.cw_diskspc_threshold}% Disk Utilization reached"
   metric_name         = "DiskSpaceUtilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -53,7 +53,7 @@ resource "aws_cloudwatch_metric_alarm" "disk_space_ebs_critical" {
 
 resource "aws_cloudwatch_metric_alarm" "mem_information" {
   count               = "${length(var.instance_ids)}"
-  alarm_name          = "${var.instance_name}-MemoryUtilization-info-for-${var.instance_ids[count.index]}-${var.cw_mem_threshold_info}"
+  alarm_name          = "${var.resource_name}-MemoryUtilization-info-for-${var.instance_ids[count.index]}-${var.cw_mem_threshold_info}"
   alarm_description   = "${var.cw_mem_threshold_info}% Memory Utilization Reached"
   metric_name         = "MemoryUtilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -70,7 +70,7 @@ resource "aws_cloudwatch_metric_alarm" "mem_information" {
 
 resource "aws_cloudwatch_metric_alarm" "mem_critical" {
   count               = "${length(var.instance_ids)}"
-  alarm_name          = "${var.instance_name}-MemoryUtilization-alert-for-${var.instance_ids[count.index]}-${var.cw_mem_threshold_critical}"
+  alarm_name          = "${var.resource_name}-MemoryUtilization-alert-for-${var.instance_ids[count.index]}-${var.cw_mem_threshold_critical}"
   alarm_description   = "${var.cw_mem_threshold_critical}% Memory Utilization Reached"
   metric_name         = "MemoryUtilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -87,7 +87,7 @@ resource "aws_cloudwatch_metric_alarm" "mem_critical" {
 
 resource "aws_cloudwatch_metric_alarm" "instance_status_check" {
   count               = "${length(var.instance_ids)}"
-  alarm_name          = "${var.instance_name}-StatusCheckFailed-alert-for-${var.instance_ids[count.index]}-ALERT"
+  alarm_name          = "${var.resource_name}-StatusCheckFailed-alert-for-${var.instance_ids[count.index]}-ALERT"
   alarm_description   = "Instance status check failure alert"
   metric_name         = "StatusCheckFailed"
   comparison_operator = "GreaterThanThreshold"

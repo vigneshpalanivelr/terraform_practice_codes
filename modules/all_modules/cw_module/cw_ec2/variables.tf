@@ -1,7 +1,7 @@
 variable "aws_region" 			{}
 variable "aws_account_num" 		{}
 variable "assume_role" 			{}
-variable "instance_name" 		{}
+variable "resource_name" 		{}
 variable "sns_topic_information" 	{}
 variable "sns_topic_critical" 		{}
 variable "cw_cpu_threshold_info" 	{}

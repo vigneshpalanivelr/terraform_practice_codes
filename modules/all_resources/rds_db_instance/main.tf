@@ -34,6 +34,6 @@ resource "aws_db_instance" "rds_database" {
   character_set_name                  = "${var.character_set_name}"
   performance_insights_enabled        = "${var.performance_insights_enabled}"
   iam_database_authentication_enabled = "${var.iam_database_authentication_enabled}"
-  option_group_name                   = "${var.option_group_name}"
   enabled_cloudwatch_logs_exports     = "${var.enabled_cloudwatch_logs_exports}"
+  # option_group_name                   = "${var.option_group_name}"
 }

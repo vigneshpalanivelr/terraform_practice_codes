@@ -1,5 +1,5 @@
 #Common parameter details
-output "kms_key_name"               {  value = "${data.aws_kms_key.filter_kms_key.id}"}
+# output "kms_key_name"               {  value = "${data.aws_kms_key.filter_kms_key.id}"}
 output "security_grp_name"          {  value = "${data.aws_security_group.filter_sg.name}"}
 
 #Slave Instance details

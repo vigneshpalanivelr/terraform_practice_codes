@@ -26,6 +26,6 @@ module "create_r53_private_zone" {
   source        = "../../all_resources/r53_zone"
   name          = "${var.r53_zone_name}"
   force_destroy = "${var.r53_zone_force_destroy}"
-  tags          = "${var.r53_zone_tags}"
+  tags          = "${var.tags}"
   vpc_id        = "${data.aws_vpc.selected_vpc.id}"
 }

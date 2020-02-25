@@ -32,5 +32,5 @@ variable "maintenance_window"                   { description = "Must not overla
 variable "character_set_name"                   {}
 variable "performance_insights_enabled"         {}
 variable "iam_database_authentication_enabled"  {}
-variable "option_group_name"                    {}
 variable "enabled_cloudwatch_logs_exports"      { type = "list" }
+# variable "option_group_name"                    {}

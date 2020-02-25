@@ -9,6 +9,11 @@ port_details = {
     port        = "8080"
     description = "Jenkins Port Open for - "
   }
+  pg_rds = {
+    protocol    = "tcp"
+    port        = "5432"
+    description = "RDS PostgreSQL Port Open for - "
+  }
   pingv4 = {
     protocol    = "icmp"
     port        = "-1"
