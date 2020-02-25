@@ -1,4 +1,4 @@
-variable "enabled" {}
+# variable "enabled" {}
 variable "identifier" {}
 variable "option_group_description" {}
 variable "tags" { type = "map" }

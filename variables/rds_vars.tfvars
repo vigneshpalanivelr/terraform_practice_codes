@@ -24,10 +24,6 @@ db_auto_minor_version_upgrade          = "true"
 db_performance_insights_enabled        = "false"
 db_monitoring_interval                 = "0"
 
-# RDS R53 Records Details
-rds_record_ttl                         = "300"
-rds_record_type                        = "CNAME"
-
 # ALL RDS License 
 db_license_model = {
   postgres = "postgresql-license"

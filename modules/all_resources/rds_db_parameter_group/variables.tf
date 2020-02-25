@@ -1,4 +1,4 @@
-variable "enabled" {}
+# variable "enabled" {}
 variable "identifier" {}
 variable "description" {}
 variable "family" {}

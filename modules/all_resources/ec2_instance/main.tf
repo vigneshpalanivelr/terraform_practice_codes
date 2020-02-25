@@ -21,6 +21,6 @@ resource "aws_instance" "ec2_instance" {
     delete_on_termination = false
   }
   tags                                 = "${merge(var.tags, map("Name", var.ec2_instance_name), map("Resource_Name","EC2"))}"
-  volume_tags                          = "${merge(var.tags, map("Name", "Root_Volume"), map("Resource_Name","EBS"))}"
+  volume_tags                          = "${merge(var.tags, map("Name", "${var.ec2_instance_name}-root"), map("Resource_Name","EBS"))}"
   user_data			       = "${var.userdata}"
 }

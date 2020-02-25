@@ -1,3 +1,6 @@
+# VPC Details
+vpc_subnet_group				= "default"
+
 # S3 Backend Configuration
 aws_region                      = "ap-south-1"
 aws_iam_user                    = "deployer"
@@ -5,7 +8,7 @@ assume_role                     = "deployer_role"
 s3_backend_bucket               = "terraform-tfstate-mumba-1"
 
 # R53 Details
-aws_r53_zone                    = "vignesh-private.zone.com"
+r53_zone_name                   = "vignesh-private.zone.com"
 r53_record_ttl                  = "300"
 r53_zone_force_destroy          = true
 
@@ -18,8 +21,8 @@ tags = {
 }
 
 # SNS Topics
-sns_topic_information		        = "test-sns-topic-information-alert"
-sns_topic_critical		          = "test-sns-topic-critical-alert"
+sns_topic_information		    = "test-sns-topic-information-alert"
+sns_topic_critical		        = "test-sns-topic-critical-alert"
 
 resource_creation               = true
 sqs_resource_name               = "main-sqs-queue"

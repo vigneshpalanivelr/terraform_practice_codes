@@ -1,5 +1,5 @@
 resource "aws_db_parameter_group" "parameter_group" {
-  count                    = "${var.enabled == "master" ? 1 : 0}"
+  # count                    = "${var.enabled == "master" ? 1 : 0}"
   description = "${var.description}"
   name        = "${var.identifier}"
   family      = "${var.family}"

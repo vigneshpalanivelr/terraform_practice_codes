@@ -12,7 +12,7 @@ provider "aws" {
 data "aws_instances" "instances_id_list" {
   filter {
     name = "tag:Name"
-    values = ["${var.instance_name}"]
+    values = ["${var.resource_name}"]
   }
 }
 
@@ -46,5 +46,5 @@ module "cw_alarm_ec2" {
   ebs_mount_path_list = "${var.ebs_mount_path_list}"
 
   cw_inst_status_period = "${var.cw_inst_status_period}"
-  instance_name		= "${var.instance_name}"
+  resource_name		      = "${var.resource_name}"
 }
