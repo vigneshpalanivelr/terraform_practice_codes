@@ -5,7 +5,6 @@ vpc_subnet_group				= "default"
 aws_region                      = "ap-south-1"
 aws_iam_user                    = "deployer"
 assume_role                     = "deployer_role"
-s3_backend_bucket               = "terraform-tfstate-mumba-1"
 
 # R53 Details
 r53_zone_name                   = "vignesh-private.zone.com"
