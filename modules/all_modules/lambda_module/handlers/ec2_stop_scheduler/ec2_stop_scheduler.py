@@ -3,6 +3,7 @@
 References:
 1) JSON Role Policy : lambda_deployer_role : https://marcelog.github.io/articles/aws_lambda_start_stop_ec2_instance.html
 2) Logging Hadler   : Re-Invent            : https://gist.github.com/niranjv/fb95e716151642e8ca553b0e38dd152e
+3) Lambda Issue VPC : Can't connect to ISP : https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html#vpc-internet
 '''
 import os
 import sys
@@ -11,8 +12,11 @@ import json
 import boto3
 import datetime
 
+'''importing custom modules'''
+'''Jupyter Notebook - Log file'''
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/pySetenv/variables/' )
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/pySetenv/packages/'  )
 
-'''Setting Up Lambda logger'''
 import lambda_logger
 logger = lambda_logger.setup_lambda_logger()
 
@@ -22,7 +26,7 @@ logger = lambda_logger.setup_lambda_logger()
 
 # import logger
 # execLogger  = 'rti-upload-download' + time.strftime('-%Y-%m-%d-%Hh-%Mm-%Ss-%Z') + '.log'
-# logger = logger.setupLogger('Stop Instances Logger', execLogger)
+# logger      = logger.setupLogger('Stop Instances Logger', execLogger)
 '''Jupyter Notebook - Stream'''
 # logger = logging.getLogger()
 # logger.setLevel(logging.INFO)
@@ -64,8 +68,8 @@ def stop_instance(event, lambda_context):
     Arguments:
         event          (None) : No Events Required
         lambda_context (None) : No Context Required
-    Returns:
-        List of Instance IDs
+    Actions:
+        Stopping the instances received from describe_instance function
     
     Calling Function:
         describe_instance (To get the list of filtered instances)
@@ -76,11 +80,13 @@ def stop_instance(event, lambda_context):
     # logger.info('ENVIRONMENT VARIABLES')
     # logger.info(os.environ)
     region = os.environ['region']
+    logger.info('ENV - Region    : {}'.format(region))
 
     '''Initializing all necessory variables'''
     print('\n')
     logger.info('Initializing boto3 client -  EC2')
     ec2_client                = boto3.client('ec2', region_name=region)
+    
     ec2_stop_instances_waiter = ec2_client.get_waiter('instance_stopped')
     filter_running_instance   = [{ 'Name'   : 'instance-state-name', 'Values' : ['pending','running']},
                                  { 'Name'   : 'tag:Scheduled',       'Values' : ['True']}]
