@@ -1,5 +1,8 @@
 variable "aws_account_num"     {}
-variable "vpc_subnet_name"     {}
+variable "assume_role"         {}
+variable "aws_region"          {}
+variable "aws_vpc_name"        {}
+variable "az_count"            {}
 variable "sg_group_name"       {}
 variable "lambda_role"         {}
 variable "lambda_function"     {}

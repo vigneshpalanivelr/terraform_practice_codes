@@ -12,10 +12,12 @@ resource "aws_lambda_function" "lambda" {
   memory_size      = var.lambda_memory_size
   publish          = var.lambda_publish
   
+  /*
   vpc_config {
     subnet_ids          = var.lambda_subnets
     security_group_ids  = var.lambda_security_groups
   }
+  */
   
   environment {
     variables = var.lambda_env_vars
