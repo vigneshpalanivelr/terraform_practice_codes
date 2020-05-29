@@ -32,6 +32,8 @@ logger = lambda_logger.setup_lambda_logger()
 # logger.setLevel(logging.INFO)
 # logging.basicConfig(format='[%(asctime)s] - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S %Z')
 
+today_date      = datetime.datetime.now(datetime.timezone.utc).astimezone(gettz("Asia/Kolkata"))
+logger.info('Today"s Date                : {}'.format(today_date))
 
 def json_serial(dt_object):
     '''
@@ -80,11 +82,11 @@ def stop_instance(event, lambda_context):
     # logger.info('ENVIRONMENT VARIABLES')
     # logger.info(os.environ)
     region = os.environ['region']
-    logger.info('ENV - Region    : {}'.format(region))
+    logger.info('ENV - Region                  : {}'.format(region))
 
     '''Initializing all necessory variables'''
     print('\n')
-    logger.info('Initializing boto3 client -  EC2')
+    logger.info('Initializing boto3 client     : EC2')
     ec2_client                = boto3.client('ec2', region_name=region)
     
     ec2_stop_instances_waiter = ec2_client.get_waiter('instance_stopped')
@@ -97,17 +99,19 @@ def stop_instance(event, lambda_context):
     
     if instance_id_list:
         try: 
-            logger.info('Stopping Instance(s) : {} ...'.format(instance_id_list))
+            logger.info('Stopping Instance(s)          : {} ...'.format(instance_id_list))
             stop_trigger   = ec2_client.stop_instances(InstanceIds = instance_id_list)
             if stop_trigger['ResponseMetadata']['HTTPStatusCode'] == 200:
                 logger.info(json.dumps(stop_trigger['StoppingInstances'], indent=4, separators=(',', ': '), default=json_serial))
             ec2_stop_instances_waiter.wait(Filters=filter_stopped_instance)
-            logger.info('Stopped Instance(s) : {}'.format(instance_id_list))
-            logger.info('# Lambda Function status : Completed #\n\n')
+            logger.info('Stopped Instance(s)           : {}'.format(instance_id_list))
+            logger.info('# Lambda Function status      : Completed #\n\n')
         except Exception as Error:
             logger.error('%s' %Error)
             logger.error('Failure in Stopping Instance : {} !!!'.format(instance_id_list))
-            logger.error('# Lambda Function status : Failed #\n\n')
+            logger.error('# Lambda Function status     : Failed #\n\n')
     else:
         logger.warning('No instance is in Running State')
-        logger.warning('# Lambda Function status : None #\n\n')
+        logger.warning('# Lambda Function status   : None #\n\n')
+    
+    logger.info('# End of EC2 Stop Activity #')

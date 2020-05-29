@@ -15,11 +15,10 @@ import time
 import json
 import boto3
 import datetime
-import dateutil
 from dateutil.tz import gettz
 
 '''importing custom modules'''
-'''Jupyter Notebook - Log file'''
+'''Setting Up Lambda logger'''
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/pySetenv/variables/' )
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/pySetenv/packages/'  )
 
@@ -43,8 +42,20 @@ ss_in_24hrs     = []
 ss_in_5days     = []
 ss_recent       = []
 ss_id_deleted   = []
+rds_not_ours    = []
 today_date      = datetime.datetime.now(datetime.timezone.utc).astimezone(gettz("Asia/Kolkata"))
-logger.info('Today"s Date                : {}'.format(today_date))
+logger.info('Today"s Date               : {}'.format(today_date))
+
+'''Reading Environment Variables'''
+# logger.info('ENVIRONMENT VARIABLES')
+# logger.info(os.environ)
+region         = os.environ['region']
+tolerated_days = int(os.environ['tolerated_days'])
+logger.info('ENV - Region               : {}'.format(region))
+logger.info('ENV - Tolerated Days       : {}\n'.format(tolerated_days))
+
+logger.info('Initializing boto3 client  : RDS')
+rds_client      = boto3.client('rds', region_name=region)
 
 def json_serial(dt_object):
     '''
@@ -58,7 +69,49 @@ def json_serial(dt_object):
     if isinstance(dt_object, (datetime.date, datetime.datetime)):
         return dt_object.isoformat()
 
-def future_calculations(snapshot, tolerated_days, today_date):
+def delete_snapshots(snapshots):
+    '''
+    Function to calculate the future snapshot deletion dates and intimate accordingly
+    
+    Arguments:
+        
+    Returns:
+        
+    '''
+    for snapshot in snapshots['DBSnapshots']:
+        # print(json.dumps(snapshot, indent=4, separators=(',', ': '), default=json_serial))
+        rds_instance = snapshot['DBInstanceIdentifier']
+        rds_ss_id    = snapshot['DBSnapshotIdentifier']
+        snapshot_arn = snapshot['DBSnapshotArn']
+        
+        if snapshot['Status'] == 'available':
+            logger.info('Working on RDS Instance    :  {}'.format(rds_instance))
+            
+            tags = rds_client.list_tags_for_resource(ResourceName=snapshot_arn)["TagList"]
+            # print(json.dumps(tags, indent=4, separators=(',', ': '), default=json_serial))
+            Team, retention_value = None, -1
+            
+            for tag in tags:
+                if tag['Key'] == 'Team' and tag['Value'] == 'terraform-services-india':
+                    Team = True
+                if tag['Key'] == 'BackupRetentionPolicy':
+                    logger.info('Checking the SS Tags')
+                    retention_value = tag['Value']
+                else:
+                    retention_value = tolerated_days
+            
+            if not Team or retention_value < 0:
+                rds_not_ours.append(rds_instance)
+            
+            try:
+                if Team and retention_value >=0 and delete_calculations(snapshot, retention_value, today_date):
+                    if rds_client.delete_db_snapshot(DBSnapshotIdentifier = rds_ss_id):
+                        ss_id_deleted.append(rds_ss_id)
+                        logger.info('Successfully Deleted SS    : {}'.format(rds_ss_id))
+            except Exception as Error_Msg:
+                logger.error('Couldn"t Delete Snapshot   : {} : {}'.format(rds_ss_id, str(Error_Msg)))
+
+def delete_calculations(snapshot, tolerated_days, today_date):
     '''
     Function to calculate the future snapshot deletion dates and intimate accordingly
     
@@ -68,9 +121,9 @@ def future_calculations(snapshot, tolerated_days, today_date):
         
     '''
     today_date      = today_date.date()
-    ss_created_date = snapshot['StartTime'].astimezone(gettz("Asia/Kolkata")).date()
+    ss_created_date = snapshot['InstanceCreateTime'].astimezone(gettz("Asia/Kolkata")).date()
     
-    snapshot_id     = snapshot['SnapshotId']
+    snapshot_id     = snapshot['DBSnapshotIdentifier']
     delete          = False
     
     days_old        = abs((ss_created_date - today_date).days)
@@ -102,63 +155,18 @@ def snapshots_cleanup(event, lambda_context):
         json_serial       (to process output from describe_snapshots)
     '''
     
-    '''Reading Environment Variables'''
-    # logger.info('ENVIRONMENT VARIABLES')
-    # logger.info(os.environ)
-    region         = os.environ['region']
-    tolerated_days = int(os.environ['tolerated_days'])
-    logger.info('ENV - Region                : {}'.format(region))
-    logger.info('ENV - Tolerated Days        : {}'.format(tolerated_days))
+    logger.info('Describing all the RDS Snapshots ...')
+    snapshots       = rds_client.describe_db_snapshots(Filters=[{'Name': 'snapshot-type','Values': ['manual','awsbackup']}])
+    delete_snapshots(snapshots)
     
-
-    '''Initializing all necessory variables'''
-    print('\n')
-    logger.info('Initializing boto3 client   :  EC2')
-    logger.info('Initializing boto3 client   :  STS')
-    ec2_client      = boto3.client('ec2', region_name=region)
-    sts_client      = boto3.client('sts', region_name=region)
+    # print(json.dumps(snapshots, indent=4, separators=(',', ': '), default=json_serial))
+    # print(json.dumps(snapshots.get('Marker', False), indent=4, separators=(',', ': '), default=json_serial))
     
-    logger.info('Describing all the EC2 Snapshots')
-    ss_paginator    = ec2_client.get_paginator('describe_snapshots')
-    ss_filters      = [{ 'Name': 'tag:Team', 'Values': ['terraform-services-india']}]
-    account_id      = sts_client.get_caller_identity()["Account"]
+    marker = snapshots.get('Marker', False)
+    while marker:
+        delete_snapshots(snapshots)
     
-    ss_page_iterator = ss_paginator.paginate(
-        Filters          = ss_filters,
-        OwnerIds         = [account_id], #'self'
-        PaginationConfig = {'PageSize': 200}
-    )
-    
-    logger.info('Calculating Snapshots age  ...\n')
-    # print(ss_page_iterator)
-    for page in ss_page_iterator:
-        # print(json.dumps(page, indent=4, separators=(',', ': '), default=json_serial))
-        for snapshot in page['Snapshots']:
-            # print(json.dumps(snapshot, indent=4, separators=(',', ': '), default=json_serial))
-            # ss_created_date = dateutil.parser.parse(str(snapshot['StartTime'].date())))
-            
-            action      = future_calculations(snapshot, tolerated_days, today_date)
-            
-            if action:
-                snapshot_id = snapshot['SnapshotId']
-                try:
-                    dry_run = True
-                    ec2_client.delete_snapshot(SnapshotId=snapshot_id, DryRun=dry_run)
-                except Exception as Error_Msg:
-                    dry_run = False
-                    if 'DryRunOperation' in str(Error_Msg):
-                        result = ec2_client.delete_snapshot(SnapshotId=snapshot_id, DryRun=dry_run)
-                        if result['ResponseMetadata']['HTTPStatusCode'] == 200:
-                            logger.info('Successfully Deleted SS    : {}'.format(snapshot_id))
-                    elif 'InvalidSnapshot.InUse' in str(Error_Msg):
-                        logger.warning('Snapshot In-Use skipping   : {}'.format(snapshot_id))
-                        continue
-                    else:
-                        logger.error('Couldn"t Delete Snapshot   : {} : {}'.format(snapshot_id, str(Error_Msg)))
-                finally:
-                    ss_id_deleted.append(snapshot_id)
-    
-    logger.info('Snapshot Report as Follows..\n')
+    logger.info('Snapshot Report as Follows...\n')
     if ss_id_deleted:
         logger.info('Snapshots Deleted Now      : {}'.format(len(ss_id_deleted)))
     else:
@@ -177,6 +185,11 @@ def snapshots_cleanup(event, lambda_context):
     if ss_recent:
         logger.info('Snapshots in Recent        : {}'.format(len(ss_recent)))
     else:
-        logger.info('Snapshots in Recent        : None\n')
+        logger.info('Snapshots in Recent        : None')
+    
+    if rds_not_ours:
+        logger.info('Snapshots skipped          : {}'.format(len(rds_not_ours)))
+    else:
+        logger.info('Snapshots skipped          : None\n')
     
     logger.info('# End of EC2 Snapshots Clean-Up Activity #')
