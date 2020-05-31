@@ -160,12 +160,7 @@ source_profile = deployer_role
 
 #### Terraform Commands
 #####S3
-
-```bash
-terraform init  -backend=true -backend-config='bucket=main-s3-bucket-tfstate' -backend-config='key=simple/s3/main-1-s3-bucket-tfstate.tfstate'
-terraform plan  -var-file=/root/terraform_practice_codes/global_vars.tfvars
-terraform apply -var-file=/root/terraform_practice_codes/global_vars.tfvars
-```
+- Create S3 Bucket terraform-tfstate-mumbai-1
 
 #####SQS
 ```bash
@@ -210,16 +205,3 @@ terraform apply -var-file=/root/terraform_practice_codes/global_vars.tfvars
 18) ASG
 19) AMI
 20) EFS
-
-
-
-
-
-
-
-
-
-
-
-
-
