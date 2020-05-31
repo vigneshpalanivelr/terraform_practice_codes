@@ -14,7 +14,7 @@ lambda_functions = {
     }
     cw_event_rule_name         = "ec2_stop_scheduler_cw_rule"
     cw_event_rule_description  = "ec2_stop_scheduler at 0 every day night"
-    cw_event_rule_schedule_exp = "cron(0 0 * * ? *)"
+    cw_event_rule_schedule_exp = "cron(30 18 * * ? *)"
   }
   ec2_ss_delete_scheduler = {
     lambda_name         = "ec2_ss_delete_scheduler"
@@ -27,8 +27,23 @@ lambda_functions = {
       region         = "ap-south-1"
       tolerated_days = "1"
     }
-    cw_event_rule_name         = "ec2_stop_scheduler_cw_rule"
-    cw_event_rule_description  = "ec2_stop_scheduler at 0 every day night"
-    cw_event_rule_schedule_exp = "cron(0 0 * * ? *)"
+    cw_event_rule_name         = "ec2_ss_delete_scheduler_cw_rule"
+    cw_event_rule_description  = "ec2_ss_delete_scheduler_cw_rule at 0 every day night"
+    cw_event_rule_schedule_exp = "cron(30 18 * * ? *)"
+  }
+  rds_ss_delete_scheduler = {
+    lambda_name         = "rds_ss_delete_scheduler"
+    lambda_handler      = "rds_ss_delete_scheduler.snapshots_cleanup"
+    lambda_runtime      = "python3.7"
+    lambda_timeout      = "30"
+    lambda_publish      = "false"
+    lambda_memory_size  = "128"
+    lambda_environment  = { 
+      region         = "ap-south-1"
+      tolerated_days = "1"
+    }
+    cw_event_rule_name         = "rds_ss_delete_scheduler_cw_rule"
+    cw_event_rule_description  = "rds_ss_delete_scheduler_cw_rule at 0 every day night"
+    cw_event_rule_schedule_exp = "cron(30 18 * * ? *)"
   }
 }
