@@ -11,6 +11,7 @@ import time
 import json
 import boto3
 import datetime
+from dateutil.tz import gettz
 
 '''importing custom modules'''
 '''Jupyter Notebook - Log file'''
@@ -107,8 +108,7 @@ def stop_instance(event, lambda_context):
             logger.info('Stopped Instance(s)           : {}'.format(instance_id_list))
             logger.info('# Lambda Function status      : Completed #\n\n')
         except Exception as Error:
-            logger.error('%s' %Error)
-            logger.error('Failure in Stopping Instance : {} !!!'.format(instance_id_list))
+            logger.error('Failure in Stopping Instance : {} with {}'.format(instance_id_list, str(Error_Msg)))
             logger.error('# Lambda Function status     : Failed #\n\n')
     else:
         logger.warning('No instance is in Running State')

@@ -63,9 +63,12 @@ def future_calculations(snapshot, tolerated_days, today_date):
     Function to calculate the future snapshot deletion dates and intimate accordingly
     
     Arguments:
+        snapshot       (snapshot) : Snapshot object with details
+        tolerated_days (int)      : tolerated_days that SSN to be deleted
+        today_date     (date)     : Date Object
         
     Returns:
-        
+        delete (Boolean)          : With this SS can be decided to be deleted or not        
     '''
     today_date      = today_date.date()
     ss_created_date = snapshot['StartTime'].astimezone(gettz("Asia/Kolkata")).date()
@@ -112,9 +115,8 @@ def snapshots_cleanup(event, lambda_context):
     
 
     '''Initializing all necessory variables'''
-    print('\n')
-    logger.info('Initializing boto3 client   :  EC2')
-    logger.info('Initializing boto3 client   :  STS')
+    logger.info('Initializing boto3 client   : EC2')
+    logger.info('Initializing boto3 client   : STS')
     ec2_client      = boto3.client('ec2', region_name=region)
     sts_client      = boto3.client('sts', region_name=region)
     
@@ -149,34 +151,17 @@ def snapshots_cleanup(event, lambda_context):
                     if 'DryRunOperation' in str(Error_Msg):
                         result = ec2_client.delete_snapshot(SnapshotId=snapshot_id, DryRun=dry_run)
                         if result['ResponseMetadata']['HTTPStatusCode'] == 200:
+                        	ss_id_deleted.append(snapshot_id)
                             logger.info('Successfully Deleted SS    : {}'.format(snapshot_id))
                     elif 'InvalidSnapshot.InUse' in str(Error_Msg):
                         logger.warning('Snapshot In-Use skipping   : {}'.format(snapshot_id))
                         continue
                     else:
-                        logger.error('Couldn"t Delete Snapshot   : {} : {}'.format(snapshot_id, str(Error_Msg)))
-                finally:
-                    ss_id_deleted.append(snapshot_id)
+                        logger.error('Couldn"t Delete Snapshot   : {} : {}'.format(snapshot_id, str(Error_Msg)))                    
     
-    logger.info('Snapshot Report as Follows..\n')
-    if ss_id_deleted:
-        logger.info('Snapshots Deleted Now      : {}'.format(len(ss_id_deleted)))
-    else:
-        logger.info('Snapshots Breached         : None')
-    
-    if ss_in_24hrs:
-        logger.info('Snapshots in Tolerated     : {}'.format(len(ss_in_24hrs)))
-    else:
-        logger.info('Snapshots in Tolerated     : None')
-    
-    if ss_in_5days:
-        logger.info('Snapshots in Queue         : {}'.format(len(ss_in_5days)))
-    else:
-        logger.info('Snapshots in Queue         : None')
-        
-    if ss_recent:
-        logger.info('Snapshots in Recent        : {}'.format(len(ss_recent)))
-    else:
-        logger.info('Snapshots in Recent        : None\n')
-    
+    logger.info('Snapshot Report as Follows...\n')
+	logger.info('Snapshots Deleted Now      : {}'.format(len(ss_id_deleted)))
+	logger.info('Snapshots in Tolerated     : {}'.format(len(ss_in_24hrs)))
+	logger.info('Snapshots in Queue         : {}'.format(len(ss_in_5days)))
+	logger.info('Snapshots in Recent        : {}'.format(len(ss_recent)))
     logger.info('# End of EC2 Snapshots Clean-Up Activity #')
