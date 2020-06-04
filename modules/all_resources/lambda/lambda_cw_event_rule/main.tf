@@ -4,5 +4,6 @@ resource "aws_cloudwatch_event_rule" "event_rule" {
   name                = var.cw_event_rule_name
   description         = var.cw_event_rule_description
   schedule_expression = var.cw_event_rule_schedule_exp
+  event_pattern       = var.cw_event_rule_schedule_eve
   is_enabled          = var.cw_event_rule_is_enabled
 }
