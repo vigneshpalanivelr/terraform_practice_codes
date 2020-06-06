@@ -71,12 +71,13 @@ def json_serial(dt_object):
 
 def delete_snapshots(snapshots):
     '''
-    Function to calculate the future snapshot deletion dates and intimate accordingly
+    Function to calculate and delete SS
     
     Arguments:
+        snapshot       (snapshot) : Snapshot object with details
         
     Returns:
-        
+        Deletion
     '''
     for snapshot in snapshots['DBSnapshots']:
         # print(json.dumps(snapshot, indent=4, separators=(',', ': '), default=json_serial))
@@ -113,12 +114,16 @@ def delete_snapshots(snapshots):
 
 def delete_calculations(snapshot, tolerated_days, today_date):
     '''
-    Function to calculate the future snapshot deletion dates and intimate accordingly
+    Function to calculate the snapshot can be deleted or not
     
     Arguments:
+        snapshot       (snapshot) : Snapshot object with details
+        tolerated_days (int)      : tolerated_days that SSN to be deleted
+        today_date     (date)     : Date Object
         
     Returns:
-        
+        delete (Boolean)          : With this SS can be decided to be deleted or not
+    
     '''
     today_date      = today_date.date()
     ss_created_date = snapshot['InstanceCreateTime'].astimezone(gettz("Asia/Kolkata")).date()
@@ -142,17 +147,18 @@ def delete_calculations(snapshot, tolerated_days, today_date):
 ''' Main Function'''
 def snapshots_cleanup(event, lambda_context):
     '''
-    Function to cleanup the Ec2 snapshots older than X Days
+    Function to cleanup the RDS snapshots older than X Days
     
     Arguments:
         event          (None) : No Events Required
         lambda_context (None) : No Context Required
     Returns:
-        Deleting the snapshots ids reveived from he function describe_snapshots
+        Iterating the Snapshots then calculate it and Delete it
     
     Calling Function:
-        describe_snapshots (To get the list of filtered snapshots)
-        json_serial       (to process output from describe_snapshots)
+        delete_calculations (Calculate that it can be deleted or not)
+        delete_snapshots    (Based on the above Calculations, decided to delete the SS
+        json_serial         (to process output from describe_snapshots)
     '''
     
     logger.info('Describing all the RDS Snapshots ...')
@@ -167,29 +173,9 @@ def snapshots_cleanup(event, lambda_context):
         delete_snapshots(snapshots)
     
     logger.info('Snapshot Report as Follows...\n')
-    if ss_id_deleted:
-        logger.info('Snapshots Deleted Now      : {}'.format(len(ss_id_deleted)))
-    else:
-        logger.info('Snapshots Breached         : None')
-    
-    if ss_in_24hrs:
-        logger.info('Snapshots in Tolerated     : {}'.format(len(ss_in_24hrs)))
-    else:
-        logger.info('Snapshots in Tolerated     : None')
-    
-    if ss_in_5days:
-        logger.info('Snapshots in Queue         : {}'.format(len(ss_in_5days)))
-    else:
-        logger.info('Snapshots in Queue         : None')
-        
-    if ss_recent:
-        logger.info('Snapshots in Recent        : {}'.format(len(ss_recent)))
-    else:
-        logger.info('Snapshots in Recent        : None')
-    
-    if rds_not_ours:
-        logger.info('Snapshots skipped          : {}'.format(len(rds_not_ours)))
-    else:
-        logger.info('Snapshots skipped          : None\n')
-    
+    logger.info('Snapshots Deleted Now      : {}'.format(len(ss_id_deleted)))
+    logger.info('Snapshots in Tolerated     : {}'.format(len(ss_in_24hrs)))
+    logger.info('Snapshots in Queue         : {}'.format(len(ss_in_5days)))
+    logger.info('Snapshots in Recent        : {}'.format(len(ss_recent)))
+    logger.info('Snapshots skipped          : {}'.format(len(rds_not_ours)))
     logger.info('# End of EC2 Snapshots Clean-Up Activity #')

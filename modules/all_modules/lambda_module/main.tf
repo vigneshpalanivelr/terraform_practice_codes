@@ -77,6 +77,11 @@ data "external" "make_zip_sh" {
   }
 }
 
+data "template_file" "events" {
+  count    = var.lambda_functions[var.lambda_function]["cw_event_rule_schedule_exp"] == "" ? 1 : 0
+  template = "${file("${path.module}/events/${var.lambda_functions[var.lambda_function]["lambda_name"]}.tpl")}"
+}
+
 module "lambda_scheduler" {
   providers       = { aws.default = aws.default }
   
@@ -104,7 +109,8 @@ module "lambda_cw_event_rule" {
   
   cw_event_rule_name         = var.lambda_functions[var.lambda_function]["cw_event_rule_name"]
   cw_event_rule_description  = var.lambda_functions[var.lambda_function]["cw_event_rule_description"]
-  cw_event_rule_schedule_exp = var.lambda_functions[var.lambda_function]["cw_event_rule_schedule_exp"]
+  cw_event_rule_schedule_exp = var.lambda_functions[var.lambda_function]["cw_event_rule_schedule_exp"] == "" ? "" : var.lambda_functions[var.lambda_function]["cw_event_rule_schedule_exp"]
+  cw_event_rule_schedule_eve = var.lambda_functions[var.lambda_function]["cw_event_rule_schedule_eve"] == "" ? "" : data.template_file.events.0.rendered
   cw_event_rule_is_enabled   = "true"
 }
 
