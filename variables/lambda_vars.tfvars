@@ -33,6 +33,21 @@ lambda_functions = {
     cw_event_rule_schedule_exp = "cron(30 18 * * ? *)"
     cw_event_rule_schedule_eve = ""
   }
+  ec2_volume_eni_checker = {
+    lambda_name         = "ec2_volume_eni_checker"
+    lambda_handler      = "ec2_volume_eni_checker.volume_eni_checker"
+    lambda_runtime      = "python3.7"
+    lambda_timeout      = "30"
+    lambda_publish      = "false"
+    lambda_memory_size  = "128"
+    lambda_environment  = { 
+      region         = "ap-south-1"
+    }
+    cw_event_rule_name         = "ec2_volume_eni_checker"
+    cw_event_rule_description  = "ec2_volume_eni_checker for every week"
+    cw_event_rule_schedule_exp = "rate(7 days)"
+    cw_event_rule_schedule_eve = ""
+  }
   rds_stop_scheduler = {
     lambda_name         = "rds_stop_scheduler"
     lambda_handler      = "rds_stop_scheduler.stop_instance"
