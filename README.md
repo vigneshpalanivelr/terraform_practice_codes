@@ -90,6 +90,7 @@ Steps to follow
                 "ec2:DescribeInstanceStatus",
                 "ec2:DescribeSnapshots",
                 "ec2:DeleteSnapshot",
+                "ec2:DescribeVolumes",
                 "rds:DescribeDBSnapshots",
                 "rds:DeleteDBSnapshot",
                 "rds:ListTagsForResource",
