@@ -22,5 +22,5 @@ module "r53ac_record" {
   ttl             = "${var.r53_record_ttl}"
   records         = "${var.r53_records}"
   type            = "${var.r53_record_type}"
-  allow_overwrite = true
+  allow_overwrite = "${var.r53_overwrite}"
 }

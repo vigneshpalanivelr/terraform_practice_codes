@@ -7,3 +7,4 @@ variable "r53_record_name" {}
 variable "r53_records" {}
 variable "r53_record_ttl" {}
 variable "r53_record_type" {}
+variable "r53_overwrite" {}
