@@ -23,13 +23,28 @@ Steps to follow
 ### 1) Create Policy : ec2_cw_kms_s3_sns_r53_rds_full_access and attach to deployer_role
 ```
 {
-"Version"	: "2012-10-17",
-"Statement"	: [{
-	"Sid"		: "VisualEditor0",
-	"Effect"	: "Allow",
-	"Action"	: ["ec2:*", "sns:*", "s3:*", "cloudwatch:*", "kms:*", "route53:*", "rds:*", "logs:*", "events:*", "lambda:*"],
-	"Resource"	: "*"
-	}]
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "acm:*",
+                "sns:*",
+                "rds:*",
+                "s3:*",
+                "cloudwatch:*",
+                "kms:*",
+                "logs:*",
+                "route53:*",
+                "ec2:*",
+                "events:*",
+                "lambda:*",
+                "iam:CreateServiceLinkedRole"
+            ],
+            "Resource": "*"
+        }
+    ]
 }
 ```
 ### 2) Create User : aws_admin and Trust Relations

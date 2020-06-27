@@ -1,0 +1,1 @@
+output "tg_attachment_id"	{ value = module.aws_elb_tg_attach_module.tg_attachment_id		}

@@ -1,5 +1,6 @@
 # VPC Details
 vpc_subnet_group				= "default"
+az_count                        = "3"
 
 # S3 Backend Configuration
 aws_region                      = "ap-south-1"
@@ -22,6 +23,9 @@ tags = {
 # SNS Topics
 sns_topic_information		    = "test-sns-topic-information-alert"
 sns_topic_critical		        = "test-sns-topic-critical-alert"
+
+# Load Balancer
+lb_tg_deregistration_delay      = "30"
 
 resource_creation               = true
 sqs_resource_name               = "main-sqs-queue"
