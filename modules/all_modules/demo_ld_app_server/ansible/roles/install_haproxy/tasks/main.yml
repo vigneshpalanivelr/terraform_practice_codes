@@ -1,0 +1,53 @@
+---
+
+- name: Installing haproxy
+  become: yes
+  yum:
+    name: haproxy
+    state: present
+
+- name: Update haproxy Configuration file with Frontend
+  become: yes
+  blockinfile:
+    path: /etc/haproxy/haproxy.cfg
+    marker_begin: "BEGIN : Frontend Configuration : "
+    marker_end: "END  : Frontend Configuration : "
+    block: |
+      frontend proxy_server
+          bind *:80
+          option http-server-close
+          option forwardfor
+          default_backend app-servers
+
+- name: Update haproxy Configuration file with Backend
+  become: yes
+  blockinfile:
+    path: /etc/haproxy/haproxy.cfg
+    marker_begin: "BEGIN : Backend Configuration : "
+    marker_end: "END  : Backend Configuration : "
+    block: |
+      backend app-servers
+          balance     roundrobin
+          cookie SERVERID insert indirect nocache
+          option httpchk HEAD / HTTP/1.1\r\nHost:\ localhost
+          server  app1 app-server-1.demo.com:80 cookie sa check
+          server  app2 app-server-2.demo.com:80 cookie sb check
+
+- name: Create List of nodes to be added into Cluster
+  set_fact: appservers=[{%for host in groups['app_servers']%}"{{ host }}"{% if not loop.last %},{% endif %}{% endfor %}]
+
+- name: Adding in Host file
+  become: yes
+  lineinfile:
+    path: /etc/hosts
+    line: '{{ appservers[index] }} app-server-{{ index + 1 }}.demo.com'
+  loop: "{{ appservers }}"
+  loop_control:
+      index_var: index
+
+- name: Restart & Enable haproxy
+  become: yes
+  systemd:
+    name: haproxy
+    state: restarted
+    enabled: true

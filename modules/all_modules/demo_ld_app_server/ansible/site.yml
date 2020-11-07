@@ -1,0 +1,11 @@
+---
+
+- hosts: proxy_server
+  connection: ssh
+  roles:
+    - { role: install_haproxy ,tags: ['install_haproxy']}
+
+- hosts: app_servers
+  connection: ssh
+  roles:
+    - { role: install_httpd ,tags: ['install_httpd']}

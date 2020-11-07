@@ -1,0 +1,62 @@
+---
+
+- name: Installing httpd
+  become: yes
+  yum:
+    name: httpd
+    state: present
+
+- name: Fetch instance id
+  become: yes
+  uri:
+    url: http://169.254.169.254/latest/meta-data/instance-id
+    return_content: yes
+  register: instance_id
+
+- name: Editing index.html
+  become: yes
+  lineinfile:
+    path: /var/www/html/index.html
+    create: yes
+    state: present
+    line: 'Hello World from <b>{{ instance_id.content }}</b>'
+
+- name: Check the status of the file
+  stat:
+    path: /etc/httpd/conf.d/welcome.conf
+  register: src_file_stat
+
+- name: Take Backup
+  become: yes
+  copy:
+    remote_src: True
+    src: /etc/httpd/conf.d/welcome.conf
+    dest: /etc/httpd/conf.d/welcome.conf_backup
+  when: src_file_stat.stat.exists
+  register: backup
+
+- name: Remove old file
+  become: yes
+  file:
+    path: /etc/httpd/conf.d/welcome.conf
+    state: absent
+  when: backup.changed == True
+
+- name: Create List of nodes to be added as proxy server
+  set_fact: proxyserver=[{%for host in groups['proxy_server']%}"{{ host }}"{% if not loop.last %},{% endif %}{% endfor %}]
+
+- name: Adding in Host file
+  become: yes
+  lineinfile:
+    path: /etc/hosts
+    line: '{{ proxyserver[index] }} proxy-server.demo.com'
+  loop: "{{ proxyserver }}"
+  loop_control:
+      index_var: index
+
+- name: Restart & Enable haproxy
+  become: yes
+  systemd:
+    name: httpd
+    state: restarted
+    enabled: true
