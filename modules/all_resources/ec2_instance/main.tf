@@ -1,6 +1,6 @@
 resource "aws_instance" "ec2_instance" {
   ami                                  = "${var.ami}"
-  availability_zone                    = "${var.availability_zone}"
+  # availability_zone                    = "${var.availability_zone}"
   ebs_optimized                        = "${var.ebs_optimized}"
   disable_api_termination              = "${var.disable_api_termination}"
   instance_initiated_shutdown_behavior = "${var.instance_initiated_shutdown_behavior}"

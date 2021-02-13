@@ -94,4 +94,21 @@ lambda_functions = {
     cw_event_rule_schedule_exp = ""
     cw_event_rule_schedule_eve = "true"
   }
+  iam_access_key_checker = {
+    lambda_name         = "iam_access_key_checker"
+    lambda_handler      = "iam_access_key_checker.check_access_key"
+    lambda_runtime      = "python3.7"
+    lambda_timeout      = "30"
+    lambda_publish      = "false"
+    lambda_memory_size  = "128"
+    lambda_environment  = { 
+      region         = "ap-south-1"
+      graceDays      = "1"
+      maxDays        = "2"
+    }
+    cw_event_rule_name         = "iam_access_key_checker_cw_rule"
+    cw_event_rule_description  = "iam_access_key_checker at 0 every day night"
+    cw_event_rule_schedule_exp = "cron(0/5 * * * ? *)" #"cron(30 18 * * ? *)"
+    cw_event_rule_schedule_eve = ""
+  }
 }

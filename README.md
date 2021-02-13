@@ -5,7 +5,7 @@ Building AWS Infrastructure using Jenkins-Terraform Automation
 | Variable File     | Variables                 | Values                    |
 | ----------------- | ------------------------- | ------------------------- |
 | Global            | aws_region_               | ap-south-1                |
-| Global            | aws_iam_user              | aws_admin_                |
+| Global            | aws_iam_user              | deployer_user_            |
 | Global            | assume_role_              | deployer_role_            |
 | Global            | s3_backend_bucket         | terraform-tfstate-mumba-1 |
 | EC2               | ec2_instance_profile      | ec2_instance_profile      |
@@ -14,7 +14,7 @@ Building AWS Infrastructure using Jenkins-Terraform Automation
 ## Pre-Requistics in AWS IAM Set-Up
 Steps to follow
 1) Create Policy : ```ec2_cw_kms_s3_sns_r53_rds_full_access```
-2) Create User   : ```aws_admin```
+2) Create User   : ```deployer_user```
 3) Create Role   : ```ec2_instance_profile```
 4) Create Role   : ```deployer_role```
 5) Create Role   : ```lambda_deployer_role```
@@ -22,6 +22,7 @@ Steps to follow
 
 ### 1) Create Policy : ec2_cw_kms_s3_sns_r53_rds_full_access and attach to deployer_role
 ```
+IAM :  List READ Tagging
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -40,26 +41,28 @@ Steps to follow
                 "ec2:*",
                 "events:*",
                 "lambda:*",
-                "iam:CreateServiceLinkedRole"
+                "iam:CreateServiceLinkedRole",
+                "iam:GetInstanceProfile",
+                "ses:*"
             ],
             "Resource": "*"
         }
     ]
 }
 ```
-### 2) Create User : aws_admin and Trust Relations
+
+### 2) Create User : deployer_user and attach below policy
 ```
-{
-  "Version"	: "2012-10-17",
-  "Statement"	: {
-    "Effect"	: "Allow",
-    "Action"	: "sts:AssumeRole",
-    "Resource"	: "arn:aws:iam::210315133748:role/deployer_role"
-  }
-}
+Attach Policy : IAMUserChangePassword
+Attach Policy : AmazonS3FullAccess
+Attach Policy : assume_role
 ```
+
 ### 3) Create Role : ec2_instance_profile and Trust Relations
 ```
+Attach Policy : AmazonEC2ContainerServiceFullAccess
+Attach Policy : ec2_cw_kms_s3_sns_r53_full_access
+
 {
   "Version"	: "2012-10-17",
   "Statement"	: [{
@@ -72,8 +75,17 @@ Steps to follow
     }]
 }
 ```
-### 4) Create Role deployer_role and attch policy (1)
+
+### 4) Create Role deployer_role and Attach policy (1) also Trust Relations
 ```
+Attach Policy : AmazonVPCReadOnlyAccess
+Attach Policy : AmazonEC2ContainerServiceFullAccess
+Attach Policy : IAMReadOnlyAccess
+Attach Policy : AWSCloudFormationReadOnlyAccess
+Attach Policy : ec2_cw_kms_s3_sns_r53_full_access
+Attach Policy : AWSDataExchangeSubscriberFullAccess
+
+
 {
   "Version"	: "2012-10-17",
   "Action"	: "sts:AssumeRole"
@@ -82,13 +94,14 @@ Steps to follow
     "Principal"	: {
       "AWS"	: [
         "arn:aws:iam::210315133748:role/ec2_instance_profile",
-        "arn:aws:iam::210315133748:user/aws_admin"
+        "arn:aws:iam::210315133748:user/deployer_user"
         ],
       "Service"	: "ec2.amazonaws.com"
       },
   }]
 }
 ```
+
 ### 5) Create policy lambda_deployer_policy and attach to lambda_deployer_role
 ```
 {
@@ -139,6 +152,17 @@ Steps to follow
 }
 ```
 
+### 6) Create Profile : assume_role Attach it to deployer_user
+```
+{
+  "Version"	: "2012-10-17",
+  "Statement"	: {
+    "Effect"	: "Allow",
+    "Action"	: "sts:AssumeRole",
+    "Resource"	: "arn:aws:iam::210315133748:role/deployer_role"
+  }
+}
+```
 
 ## Pre-Requistics for Terraform Set-Up
 - Create S3 Bucket terraform-tfstate-mumbai-1

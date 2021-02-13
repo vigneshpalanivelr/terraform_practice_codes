@@ -43,3 +43,9 @@ eni_key_state_prefix            = "eni_module"
 kms_key_alias_name              = "custome-key"
 tag_project_code                = "US-EMEA-APAC"
 tag_department                  = "Database"
+
+subnet_az_map = {
+  default-subnet-1 = "ap-south-1a"
+  default-subnet-2 = "ap-south-1b"
+  default-subnet-3 = "ap-south-1c"
+}
