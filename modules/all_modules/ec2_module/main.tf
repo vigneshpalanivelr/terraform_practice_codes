@@ -139,5 +139,5 @@ module "aws_ec2_module" {
   volume_size                          = "${var.ec2_root_volume_size}"
   iops                                 = "${var.ec2_root_volume_iops}"
   delete_on_termination                = "${var.ec2_root_volume_delete_on_termination}"
-  userdata			                       = "${data.template_cloudinit_config.userdata_multipart.rendered}"
+  userdata			                   = "${data.template_cloudinit_config.userdata_multipart.rendered}"
 }
