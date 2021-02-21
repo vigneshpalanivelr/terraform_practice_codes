@@ -6,5 +6,5 @@ variable "asg_launch_template"        {}
 variable "asg_health_check_type"      {}
 variable "asg_desired_capacity"       {}
 variable "asg_termination_policies"   {}
-variable "asg_tags"                   { type = list(string)  }
+variable "asg_tags"                   { type = list(map(any)) }
 variable "asg_force_delete"           {}
