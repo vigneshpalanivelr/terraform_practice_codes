@@ -13,7 +13,7 @@ module "auto_scaling_group" {
   asg_name                      = var.asg_name
   asg_max_size                  = var.asg_max_size
   asg_min_size                  = var.asg_min_size
-  asg_desired_capacity          = "${length(var.asg_desired_capacity) > 0 ? var.asg_desired_capacity : var.min_size}"
+  asg_desired_capacity          = "${var.asg_desired_capacity > 0 ? var.asg_desired_capacity : var.asg_min_size}"
   # asg_availability_zones        = var.asg_availability_zones
   asg_launch_template           = "${data.aws_launch_template.test-asg-lt.id}"
   asg_health_check_type         = var.asg_health_check_type
