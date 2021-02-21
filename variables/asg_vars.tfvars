@@ -22,3 +22,24 @@ asg_lt_ebs_additional_volumes   = [
     volume_type           = "gp2"
     }
 ]
+
+# Common Tags
+asg_tags = [
+  {
+  key                 = "Owner"
+  value               = "Vignesh Palanivel"
+  propagate_at_launch = true
+  },{
+  key                 = "DL"
+  value               = "Vignesh_Palanivel@aws.com"
+  propagate_at_launch = true
+  },{
+  key                 = "Team"
+  value               = "terraform-services-india"
+  propagate_at_launch = true
+  },{
+  key                 = "CCPC"
+  value               = "123456789"
+  propagate_at_launch = true
+  }
+]

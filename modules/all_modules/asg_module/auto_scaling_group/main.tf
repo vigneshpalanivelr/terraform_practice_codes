@@ -18,6 +18,20 @@ module "auto_scaling_group" {
   asg_launch_template           = "${data.aws_launch_template.test-asg-lt.id}"
   asg_health_check_type         = var.asg_health_check_type
   asg_termination_policies      = ["OldestLaunchConfiguration", "OldestLaunchTemplate", "OldestInstance"]
-  asg_tags                      = "${merge(var.tags, map("Name", var.asg_name), map("Resource_Name", "ASG"))}"
   asg_force_delete              = "${var.asg_force_delete}"
+  asg_tags                      = concat(
+    [
+      {
+        "key"                 = "Name"
+        "value"               = var.asg_name
+        "propagate_at_launch" = true
+      },
+      {
+        "key"                 = "Resource_Name"
+        "value"               = "ASG"
+        "propagate_at_launch" = true
+      },
+    ],
+    var.asg_tags,
+  )
 }
