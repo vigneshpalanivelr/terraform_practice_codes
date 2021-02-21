@@ -8,12 +8,11 @@ resource "aws_autoscaling_group" "asg" {
   }
   
   instance_refresh {
-    strategy = "Rolling"
-    preferences {
-      min_healthy_percentage = 50
-    }
-    triggers = ["tag"]
+    enabled = true
+    instance_warmup = 300
+    min_healthy_percentage = 90
   }
+  
   health_check_type         = var.asg_health_check_type
   desired_capacity          = var.asg_desired_capacity
   termination_policies      = var.asg_termination_policies
