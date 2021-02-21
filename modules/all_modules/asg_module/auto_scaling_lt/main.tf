@@ -92,5 +92,5 @@ module "auto_scaling_lt" {
   asg_lt_associate_public_ip       = var.asg_lt_associate_public_ip
   asg_lt_ebs_additional_volumes    = var.asg_lt_ebs_additional_volumes
   asg_lt_delete_on_termination     = var.asg_lt_delete_on_termination
-  tags                             = var.tags
+  tags                             = "${merge(var.tags, map("Name", var.asg_lt_name), map("Resource_Name", "ASG-LT"))}"
 }
