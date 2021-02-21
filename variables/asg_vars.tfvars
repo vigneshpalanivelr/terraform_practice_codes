@@ -1,6 +1,7 @@
 # ASG Details
+asg_force_delete                = true
 asg_lt_delete_on_termination    = true
-asg_lt_disable_api_termination  = false
+asg_lt_disable_api_termination  = true
 asg_lt_associate_public_ip      = true
 ec2_instance_profile_name       = "ec2_instance_profile"
 ami_root_device_type            = "ebs"

@@ -14,7 +14,6 @@ resource "aws_autoscaling_group" "asg" {
     }
     triggers = ["tag"]
   }
-  initial_lifecycle_hook    = var.asg_initial_lifecycle_hook
   health_check_type         = var.asg_health_check_type
   desired_capacity          = var.asg_desired_capacity
   termination_policies      = var.asg_termination_policies

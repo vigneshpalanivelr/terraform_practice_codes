@@ -16,7 +16,6 @@ module "auto_scaling_group" {
   asg_desired_capacity          = "${length(var.asg_desired_capacity) > 0 ? var.asg_desired_capacity : var.min_size}"
   # asg_availability_zones        = var.asg_availability_zones
   asg_launch_template           = "${data.aws_launch_template.test-asg-lt.id}"
-  asg_initial_lifecycle_hook    = var.asg_initial_lifecycle_hook
   asg_health_check_type         = var.asg_health_check_type
   asg_termination_policies      = ["OldestLaunchConfiguration", "OldestLaunchTemplate", "OldestInstance"]
   asg_tags                      = "${merge(var.tags, map("Name", var.asg_name), map("Resource_Name", "ASG"))}"
